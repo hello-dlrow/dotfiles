@@ -1,23 +1,84 @@
 {
+  // Language Server Protocol settings
   "languageserver": {
     "clangd": {
       "command": "clangd",
       "args": ["--background-index"],
       "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
       "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
+    },
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod"],
+      "filetypes": ["go"]
+    },
+    "rust": {
+      "command": "rust-analyzer",
+      "filetypes": ["rust"],
+      "rootPatterns": ["Cargo.toml"]
     }
   },
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": true,
-  "python.linting.flake8Enabled": true,
+
+  // Diagnostic settings
+  "diagnostic.errorSign": "✘",
+  "diagnostic.warningSign": "⚠",
+  "diagnostic.infoSign": "ℹ",
+  "diagnostic.hintSign": "➤",
+
+  // Signature and documentation
+  "signature.enable": true,
+  "signature.target": "float",
+  "coc.preferences.jumpCommand": "vsplit",
+
+  // Suggestion settings
   "suggest.noselect": false,
   "suggest.enablePreselect": true,
   "suggest.enablePreview": true,
   "suggest.maxCompleteItemCount": 20,
+  "suggest.triggerAfterInsertEnter": true,
+  "suggest.timeout": 5000,
+  "suggest.minTriggerInputLength": 2,
+  "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.snippetIndicator": "✎",
+  "suggest.floatEnable": true,
+  "suggest.detailField": "preview",
+  "suggest.autoTrigger": "always",
+
+  // Git integration
+  "git.enableGutters": true,
+  "git.addedSign.text": "┃",
+  "git.changedSign.text": "┃",
+  "git.removedSign.text": "┃",
+  "git.topRemovedSign.text": "┃",
+  "git.changeRemovedSign.text": "┃",
+
+  // Python specific settings
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "python.formatting.provider": "black",
+  "python.sortImports.path": "isort",
+  "pyright.enable": true,
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.diagnosticMode": "workspace",
+
+  // Format on save settings
   "coc.preferences.formatOnSaveFiletypes": [
     "python",
-    "cpp"
+    "cpp",
+    "javascript",
+    "typescript",
+    "json",
+    "html",
+    "css",
+    "markdown"
   ],
+
+  // Prettier settings
+  "prettier.singleQuote": true,
+  "prettier.printWidth": 100,
+
+  // Snippets settings
   "snippets.ultisnips.pythonPrompt": false
 }
-
