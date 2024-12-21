@@ -1,104 +1,64 @@
 #!/usr/bin/env zsh
 
-# 安装额外的 oh-my-zsh 插件
-echo "Installing additional oh-my-zsh plugins..."
-sudo apt-get install -y autojump
-echo "source /usr/share/autojump/autojump.zsh" >> ~/.zshrc
+# Exit on error
+set -e
 
-# 安装 Coc.nvim 的依赖
-echo "Installing Coc.nvim dependencies..."
-curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+echo "Starting setup script..."
+
+# Update package lists
+sudo apt-get update
+
+# Install necessary packages
+echo "Installing basic dependencies..."
+sudo apt-get install -y \
+    zsh \
+    git \
+    curl \
+    wget \
+    python3-pip \
+    nodejs \
+    npm \
+    fonts-powerline
+
+# Install Oh My Zsh
+echo "Installing Oh My Zsh..."
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+# Install Powerlevel10k theme
+echo "Installing Powerlevel10k theme..."
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+# Install ZSH plugins
+echo "Installing ZSH plugins..."
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+# Configure ZSH
+echo "Configuring ZSH..."
+sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
+sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+
+# Install Python packages
+echo "Installing Python packages..."
+pip3 install --upgrade pip
+pip3 install flake8 pylint pytight autopep8
+
+# Install clangd-12 and ripgrep
+echo "Installing clangd-12 and ripgrep..."
+sudo apt-get install -y clangd-12 ripgrep
+
+# Install Node.js LTS
+echo "Installing Node.js LTS..."
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 sudo apt-get install -y nodejs
-sudo npm install -g yarn
 
-# 安装 coc 扩展
-echo "Installing Coc extensions..."
-mkdir -p ~/.config/coc/extensions
-cd ~/.config/coc/extensions
-if [ ! -f package.json ]
-then
-  echo '{"dependencies":{}}' > package.json
-fi
-npm install \
-    coc-json \
-    coc-pyright \
-    coc-clangd \
-    coc-snippets \
-    coc-pairs \
-    --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
+# Install Vim-plug
+echo "Installing Vim-plug..."
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-# 创建 Coc 配置文件
-echo "Creating Coc configuration..."
-mkdir -p ~/.config/nvim
-cat > ~/.config/nvim/coc-settings.json << 'EOL'
-{
-  "suggest.noselect": false,
-  "suggest.enablePreselect": false,
-  "suggest.triggerAfterInsertEnter": true,
-  "suggest.timeout": 5000,
-  "suggest.enablePreview": true,
-  "suggest.floatEnable": true,
-  "suggest.detailField": "preview",
-  "suggest.snippetIndicator": "🔸",
-  "diagnostic.errorSign": "●",
-  "diagnostic.warningSign": "⚠",
-  "diagnostic.infoSign": "•",
-  "diagnostic.checkCurrentLine": true,
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": true,
-  "python.linting.flake8Enabled": true,
-  "clangd.path": "/usr/bin/clangd-12"
-}
-EOL
+# Set ZSH as default shell
+echo "Setting ZSH as default shell..."
+chsh -s $(which zsh)
 
-# 安装 fzf 工具
-echo "Installing fzf..."
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install --all
-
-# 创建 vim 颜色主题目录
-echo "Setting up Vim color scheme..."
-mkdir -p ~/.vim/colors
-
-# 添加一些有用的 zsh aliases
-echo "Adding useful aliases..."
-cat >> ~/.zshrc << 'EOL'
-
-# Useful aliases
-alias zshconfig="vim ~/.zshrc"
-alias vimconfig="vim ~/.vimrc"
-alias update="sudo apt-get update && sudo apt-get upgrade"
-alias c="clear"
-alias ll="ls -la"
-alias ..="cd .."
-alias ...="cd ../.."
-alias reload="source ~/.zshrc"
-alias ports="netstat -tulanp"
-alias h="history"
-alias j="jobs -l"
-alias mkdir="mkdir -pv"
-
-# Git aliases
-alias gst="git status"
-alias ga="git add"
-alias gc="git commit -m"
-alias gp="git push"
-alias gd="git diff"
-alias gl="git log --oneline"
-EOL
-
-# 设置历史记录配置
-echo "Configuring command history..."
-cat >> ~/.zshrc << 'EOL'
-
-# History configuration
-HISTSIZE=10000
-SAVEHIST=10000
-setopt SHARE_HISTORY
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_DUPS
-setopt HIST_FIND_NO_DUPS
-setopt HIST_REDUCE_BLANKS
-EOL
-
-echo "Setup completed! Please restart your terminal for changes to take effect."
+echo "Setup completed! Please restart your terminal and run 'p10k configure' to setup Powerlevel10k theme."
