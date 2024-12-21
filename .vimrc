@@ -10,14 +10,15 @@ call plug#begin('~/.vim/plugged')
 " File explorer
 Plug 'preservim/nerdtree'
 
+" For NERDTree enhancement
+Plug 'ryanoasis/vim-devicons'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
 " Language Server Protocol (LSP) support
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" UltiSnips 引擎
-Plug 'SirVer/ultisnips'    
-
-" Syntax checking
-Plug 'vim-syntastic/syntastic'
+" Scheme for Vimm
+Plug 'morhetz/gruvbox'
 
 " Auto pairs for brackets
 Plug 'jiangmiao/auto-pairs'
@@ -33,131 +34,20 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
+" Indetn Line Plugins
+Plug 'Yggdroot/indentLine'
+
 " File searching
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+
 call plug#end()
 
-" Basic settings
-set nocompatible
-syntax on
-set shortmess+=I
-set number
-set relativenumber
-set laststatus=2
-set backspace=indent,eol,start
-set hidden
-set ignorecase
-set smartcase
-set incsearch
-set ruler
-set showcmd
-set wildmenu
-filetype plugin indent on
+"----------------------BASIC CONFIGURATINO------------
 
-" Disable Ex mode
-nmap Q <Nop>
-
-" Enable mouse support
-set mouse+=a
-
-" Force using hjkl for navigation
-nnoremap <Left>  :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up>    :echoe "Use k"<CR>
-nnoremap <Down>  :echoe "Use j"<CR>
-inoremap <Left>  <ESC>:echoe "Use h"<CR>
-inoremap <Right> <ESC>:echoe "Use l"<CR>
-inoremap <Up>    <ESC>:echoe "Use k"<CR>
-inoremap <Down>  <ESC>:echoe "Use j"<CR>
-
-" Quick parentheses
-:map \p i(<Esc>ea)<Esc>
-
-" Syntastic configuration
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_python_checkers = ['flake8', 'pylint']
-let g:syntastic_cpp_checkers = ['clang_check', 'gcc']
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_wq = 0 
-
-" UltiSnips 触发配置
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-" 指定 UltiSnips 的目录
-let g:UltiSnipsSnippetDirectories=["UltiSnips"]
-
-" CoC configuration
-" Use tab for trigger completion
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
-" Make <CR> auto-select the first completion item
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
-
-" GoTo code navigation
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call ShowDocumentation()<CR>
-
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-
-" Symbol renaming
-nmap <leader>rn <Plug>(coc-rename)
-
-" NERDTree configuration
-" Auto start NERDTree
-autocmd VimEnter * NERDTree
-
-" Start NERDTree when Vim starts with no files
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
-
-" Start NERDTree when Vim starts with a directory argument
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
-    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
-
-" Exit Vim if NERDTree is the only window remaining in the only tab
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-
-" Close the tab if NERDTree is the only window remaining in it
-autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-
-" Additional settings
+filetype on
+filetype plugin on
+filetype indent on
 set encoding=utf-8
 set expandtab
 set tabstop=4
@@ -172,14 +62,116 @@ set noswapfile
 set nobackup
 set scrolloff=8
 set sidescrolloff=8
-set colorcolumn=80
 set updatetime=300
 set signcolumn=yes
+set nocompatible
+set shortmess+=I
+set clipboard=unnamed
+set number
+set relativenumber
+set laststatus=2
+set backspace=indent,eol,start
+set hidden
+set ignorecase
+set smartcase
+set incsearch
+set ruler
+set showcmd
+set wildmenu
+set mouse+=a
+let mapleader = ","
+syntax on
 
-" FZF configuration
+" --------------------REMAP CONFIGURATINO-----------------
+
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+map <S-w>w <C-w>w  " 循环切换窗口
+map <S-w>h <C-w>h  " 移动到左边窗口
+map <S-w>j <C-w>j  " 移动到下面窗口
+map <S-w>k <C-w>k  " 移动到上面窗口
+map <S-w>l <C-w>l  " 移动到右边窗口
+map <S-w>v <C-w>v  " 垂直分割窗口
+map <S-w>s <C-w>s  " 水平分割窗口
+map <S-w>c <C-w>c  " 关闭当前窗口
+nnoremap <Leader>p :bp<CR>
+" --------------------Plugin CONFIGURATINO----------------
+"---COC---
+nmap <leader>rn <Plug>(coc-rename)
+autocmd BufWritePre *.py :silent call CocAction('format')
+
+" Tab 键直接选中补全项
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#confirm() :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+
+" Shift+Tab 选择下一项
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+
+" function for auto-completion
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" ------NERDTree-------
+
+" 启用 devicons
+let g:webdevicons_enable = 1
+" 启用 NERDTree 图标
+let g:webdevicons_enable_nerdtree = 1
+" 文件夹图标
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+" 不显示隐藏文件
+let NERDTreeShowHidden = 0
+" 启用文件类型图标
+let g:WebDevIconsUnicodeDecorateFileNodes = 1
+" 自动跟随
+let g:NERDTreeChDirMode = 2
+let g:NERDTreeAutoCenter = 1
+
+"autostart for nerdtree
+autocmd VimEnter * NERDTree
+
+" Start NERDTree when Vim starts with no files
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+
+" Start NERDTree when Vim starts with a directory argument
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
+
+" Exit Vim if NERDTree is the only window remaining in the only tab
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" 切换 NERDTree，定位到当前文件，并将光标定位到 NERDTree 窗口
+nnoremap <Leader>n :NERDTreeToggle<CR>
+nnoremap <Leader>f :NERDTreeFind<CR>
+" -----FZF configuration-----
 nnoremap <C-p> :Files<CR>
 nnoremap <C-f> :Rg<CR>
 
-" Customlize configuration
-let g:coc_disable_startup_warning = 1
+let g:indentLine_char = '┊'  " 设置缩进线字符
+let g:indentLine_enabled = 1  " 默认启用
 
+"------------------------ 设置主题-------------------------
+
+let g:gruvbox_contrast_dark = 'medium'
+:set bg=dark
+colorscheme gruvbox
