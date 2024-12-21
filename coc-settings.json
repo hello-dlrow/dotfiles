@@ -1,0 +1,23 @@
+{
+  "languageserver": {
+    "clangd": {
+      "command": "clangd",
+      "args": ["--background-index"],
+      "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
+      "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
+    }
+  },
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.flake8Enabled": true,
+  "suggest.noselect": false,
+  "suggest.enablePreselect": true,
+  "suggest.enablePreview": true,
+  "suggest.maxCompleteItemCount": 20,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "python",
+    "cpp"
+  ],
+  "snippets.ultisnips.pythonPrompt": false
+}
+
