@@ -13,6 +13,9 @@ Plug 'preservim/nerdtree'
 " Language Server Protocol (LSP) support
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" UltiSnips 引擎
+Plug 'SirVer/ultisnips'    
+
 " Syntax checking
 Plug 'vim-syntastic/syntastic'
 
@@ -81,6 +84,14 @@ let g:syntastic_cpp_checkers = ['clang_check', 'gcc']
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_wq = 0 
+
+" UltiSnips 触发配置
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" 指定 UltiSnips 的目录
+let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 
 " CoC configuration
 " Use tab for trigger completion
