@@ -38,6 +38,15 @@
             ]
         }
     },
+    "colors.enable": true,
+    "semanticTokens.enable": true,
+    "highlight.document.enable": true,
+    "highlight.references.enable": true,
+    "highlight.colorScheme": {
+        "text": "#AAAAAA",
+        "variable": "#9CDCFE",
+        "parameter": "#9CDCFE"
+    }
     // Diagnostic settings
     "diagnostic.errorSign": "✘",
     "diagnostic.warningSign": "⚠",
@@ -68,6 +77,9 @@
     "git.topRemovedSign.text": "┃",
     "git.changeRemovedSign.text": "┃",
     // Python specific settings
+    "pyright.inlayHints.functionReturnTypes": false,
+    "pyright.inlayHints.variableTypes": false,
+    "pyright.inlayHints.parameterTypes": false
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
     "python.linting.flake8Enabled": true,
