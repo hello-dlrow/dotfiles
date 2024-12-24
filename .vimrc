@@ -98,11 +98,13 @@ map <S-w>v <C-w>v  " 垂直分割窗口
 map <S-w>s <C-w>s  " 水平分割窗口
 map <S-w>c <C-w>c  " 关闭当前窗口
 nnoremap <Leader>p :bp<CR>
+nnoremap <Leader>q :q<CR>
+nnoremap <Leader>w <C-w>w
+nnoremap <Leader>s :reg<CR>
 " --------------------Plugin CONFIGURATINO----------------
 "---COC---
 nmap <leader>rn <Plug>(coc-rename)
 autocmd BufWritePre *.py :silent call CocAction('format')
-
 " Tab 键直接选中补全项
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#confirm() :
@@ -174,4 +176,4 @@ let g:indentLine_enabled = 1  " 默认启用
 
 let g:gruvbox_contrast_dark = 'medium'
 :set bg=dark
-colorscheme gruvbox
+c
