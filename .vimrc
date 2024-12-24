@@ -176,4 +176,4 @@ let g:indentLine_enabled = 1  " 默认启用
 
 let g:gruvbox_contrast_dark = 'medium'
 :set bg=dark
-c
+colorscheme gruvbox
